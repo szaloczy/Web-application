@@ -1,13 +1,13 @@
 package blood_donation.com.blood_donation.framework.db.entity;
 
-import blood_donation.com.blood_donation.enums.LocationStatus;
+import blood_donation.com.blood_donation.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Table
@@ -15,20 +15,28 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationRecord {
+public class DonatorRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String fullname;
 
     @Column(nullable = false)
-    private String address;
+    private int TAJNumber;
 
     @Column(nullable = false)
-    private LocationStatus status;
+    private Gender gender;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "location", fetch = FetchType.LAZY)
-    private List<DonationRecord> donations;
+    @Column(nullable = false)
+    private String citizenship;
+
+    @Column(nullable = false)
+    private Date birthDate;
+
+    @Column(nullable = false)
+    private boolean isAble;
+
 }

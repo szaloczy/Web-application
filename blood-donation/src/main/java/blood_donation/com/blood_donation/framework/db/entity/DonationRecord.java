@@ -1,5 +1,7 @@
 package blood_donation.com.blood_donation.framework.db.entity;
 
+import blood_donation.com.blood_donation.domain.Donator;
+import blood_donation.com.blood_donation.domain.Location;
 import blood_donation.com.blood_donation.enums.LocationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Table
@@ -15,20 +17,25 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationRecord {
+public class DonationRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private Donator donator;
 
     @Column(nullable = false)
-    private String address;
+    private Location location;
 
     @Column(nullable = false)
-    private LocationStatus status;
+    private Date donationDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "location", fetch = FetchType.LAZY)
-    private List<DonationRecord> donations;
+    @Column(nullable = false)
+    private String DoctorFullName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "locatio_id", nullable = false)
+    private LocationRecord Location;
 }

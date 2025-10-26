@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    container_name: donation-db
+    environment:
+      POSTGRE_USER: admin
+      POSTGRE_PASSWORD: admin
+      POSTGRE_DB: donation
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: donation-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/donation
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

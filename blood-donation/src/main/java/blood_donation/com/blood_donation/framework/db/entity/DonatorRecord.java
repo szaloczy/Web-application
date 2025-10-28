@@ -27,12 +27,14 @@ public class DonatorRecord {
     @Column(nullable = false)
     private int TAJNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
 
     @Column(nullable = false)
     private String citizenship;
 
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date birthDate;
 

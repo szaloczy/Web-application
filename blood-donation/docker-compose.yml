@@ -4,9 +4,9 @@ services:
     image: postgres:15
     container_name: donation-db
     environment:
-      POSTGRE_USER: admin
-      POSTGRE_PASSWORD: admin
-      POSTGRE_DB: donation
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: donation
     ports:
       - "5432:5432"
     volumes:
@@ -25,6 +25,5 @@ services:
       - "8080:8080"
     depends_on:
       - db
-
 volumes:
   pgdata:

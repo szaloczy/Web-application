@@ -1,7 +1,9 @@
-version: '3.9'
+version: '3.8'
+
 services:
+  # PostgreSQL Database
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: donation-db
     environment:
       POSTGRES_USER: admin
@@ -11,9 +13,20 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - blood-donation-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d donation"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
+  # Spring Boot Backend
   backend:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: donation-backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/donation
@@ -21,9 +34,34 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - blood-donation-network
+    restart: unless-stopped
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: donation-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - blood-donation-network
+    restart: unless-stopped
+
 volumes:
   pgdata:
+    driver: local
+
+networks:
+  blood-donation-network:
+    driver: bridge

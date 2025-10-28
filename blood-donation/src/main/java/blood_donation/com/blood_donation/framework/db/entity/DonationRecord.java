@@ -1,8 +1,5 @@
 package blood_donation.com.blood_donation.framework.db.entity;
 
-import blood_donation.com.blood_donation.domain.Donator;
-import blood_donation.com.blood_donation.domain.Location;
-import blood_donation.com.blood_donation.enums.LocationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,19 +20,18 @@ public class DonationRecord {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false)
-    private Donator donator;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "donator_id", nullable = false)
+    private DonatorRecord donator;
 
-    @Column(nullable = false)
-    private Location location;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    private LocationRecord location;
 
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date donationDate;
 
     @Column(nullable = false)
-    private String DoctorFullName;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locatio_id", nullable = false)
-    private LocationRecord Location;
+    private String doctorFullName;
 }

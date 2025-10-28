@@ -1,0 +1,44 @@
+<app-toast/>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand text-danger" href="#">AdjVért.hu</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/">Helyszínek</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/create-location">Helyszín hozzáadása</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/donations">Véradások megtekinetése</a>
+        </li>
+        @if (!authService.isLoggedIn()) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Bejelenkezés</a>
+        </li>
+        }
+        @if (authService.isLoggedIn()) {
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">kilépés</a>
+        </li>
+        }
+      </ul>
+
+      @if (authService.isLoggedIn()) {
+        <div class="d-flex align-items-center text-end ms-auto text-dark pe-2">
+          <span class="text-uppercase me-2 text-primary">
+            {{ authService.getUserName() }} : {{ authService.getUserRole() }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <router-outlet />
+</div>

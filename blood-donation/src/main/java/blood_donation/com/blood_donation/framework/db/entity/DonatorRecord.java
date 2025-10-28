@@ -34,11 +34,16 @@ public class DonatorRecord {
     @Column(nullable = false)
     private String citizenship;
 
+    @Column(nullable = false)
+    private String bornLocation;
+
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date birthDate;
 
     @Column(nullable = false)
-    private boolean isAble;
+    private String address;
 
+    @Column(nullable = false)
+    private boolean isAble;
 }

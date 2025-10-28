@@ -2,7 +2,9 @@ package blood_donation.com.blood_donation.usecase.user;
 
 import blood_donation.com.blood_donation.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class Register {
     public User register(String fullname, String email, String password) {

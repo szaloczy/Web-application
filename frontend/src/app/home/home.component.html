@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center mb-4 mt-4">Helyszín kiválasztása</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Név</th>
+                    <th>Kód</th>
+                    <th>Cím</th>
+                    <th>Aktív</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(loc of locations; track loc.id) {
+                    <tr>
+                        <td>{{ loc.name }}</td>
+                        <td>{{ loc.code }}</td>
+                        <td>{{ loc.address }}</td>
+                        <td>{{ loc.active ? 'Igen': 'Nem'}}</td>
+                        <td>
+                            @if (authService.isLoggedIn()) {
+                                <button class="btn btn-outline-primary me-2" (click)="navigateToAddClientForm(loc.id)"  [disabled]="!loc.active">Véradó rögzítése</button>
+                                <button class="btn btn-outline-primary me-2" (click)="navigateToLocationForm(loc.id)">Szerkesztés</button>
+                            }
+                            @if (authService.isAdmin()) {
+                                <button class="btn btn-outline-warning me-2" (click)="toggleLocationActive(loc.id, loc.active)">{{ loc.active ? 'Inaktiválás' : 'Aktiválás' }}</button>
+                                <button class="btn btn-outline-danger" (click)="deleteLocation($index)">Törlés</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (authService.isAdmin()) {
+    <div class="col-md-12">
+        <h2 class="text-center mb-4 mt-4">Felhasználók</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Felhasználónév</th>
+                    <th>E-mail cím</th>
+                    <th>Szerepkör</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(user of users; track user.id) {
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            <button class="btn btn-outline-danger" (click)="deleteUser($index)">Törlés</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

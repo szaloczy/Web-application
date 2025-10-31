@@ -9,7 +9,7 @@ public interface UserDataSource {
     void createUser(User user);
     void deleteUser(User user);
     void updateUser(User user);
-    User getUserByFullName(String fullName);
+    User getUserByUsername(String username);
     User getUserByEmail(String email);
     User getUserById(Long id);
     List<User> getAllUser();

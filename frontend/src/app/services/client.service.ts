@@ -7,7 +7,7 @@ import { ClientDTO } from '../../types';
 })
 export class ClientService {
 
-  private readonly apiUrl = 'http://localhost:3000/api/client';
+  private readonly apiUrl = 'http://localhost:8080/api/client';
 
   http = inject(HttpClient);
 

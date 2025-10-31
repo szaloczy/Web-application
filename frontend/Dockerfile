@@ -6,13 +6,13 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
-# Build the Angular app
+# Build the Angular app for production
 RUN npm run build
 
 # Production stage

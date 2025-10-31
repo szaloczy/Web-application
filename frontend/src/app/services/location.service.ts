@@ -7,7 +7,7 @@ import { LocationDTO } from '../../types';
 })
 export class LocationService {
 
-  private readonly apiUrl = 'http://localhost:3000/api/location';
+  private readonly apiUrl = 'http://localhost:8080/api/location';
 
   http = inject(HttpClient);
 

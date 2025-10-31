@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DonationService {
-  private readonly apiUrl = 'http://localhost:3000/api/donation';
+  private readonly apiUrl = 'http://localhost:8080/api/donation';
 
   http = inject(HttpClient);
   

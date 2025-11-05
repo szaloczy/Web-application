@@ -1,5 +1,6 @@
 package blood_donation.com.blood_donation.usecase.user;
 
+import blood_donation.com.blood_donation.data.UserDataSource;
 import blood_donation.com.blood_donation.domain.User;
 import blood_donation.com.blood_donation.exception.InvalidPasswordException;
 import blood_donation.com.blood_donation.exception.UserAlreadyExistsException;
@@ -9,15 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class Register {
 
-    private final UserDataSourceImpl dataSource;
-    private PasswordEncoder passwordEncoder;
+    private final UserDataSource dataSource; //Data
+    private final PasswordEncoder passwordEncoder;
 
-    public Register(UserDataSourceImpl dataSource, PasswordEncoder passwordEncoder) {
-        this.dataSource = dataSource;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public User register(String username, String email, String password) {
         validateUserDoesNotExists(username, email);

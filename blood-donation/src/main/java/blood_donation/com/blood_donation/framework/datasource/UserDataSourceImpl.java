@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserDataSourceImpl implements UserDataSource {
@@ -44,6 +45,8 @@ public class UserDataSourceImpl implements UserDataSource {
 
     @Override
     public User getUserByEmail(String email) {
+        Optional<UserRecord> userRecord =  userRepository.findByEmail(email);
+        //User user = userMapper.toUser(userRecord);
         return null;
     }
 

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
-import { LocationDTO } from '../../types';
+import { LocationDTO, LocationStatus } from '../../types';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../services/toast.service';
 
@@ -22,77 +22,86 @@ export class LocationEditorComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   locationForm!: FormGroup;
 
-  location: LocationDTO = {
-    id: 0,
-    code: '',
-    name: '',
-    address: '',
-    active: true
-  }
-
+  location: LocationDTO | null = null;
   isNewLocation = true;
+  
+  LocationStatus = LocationStatus;
 
   ngOnInit(): void {
-  const locationId = this.activatedRoute.snapshot.params['id'];
+    const locationId = this.activatedRoute.snapshot.params['id'];
 
-  this.locationForm = this.formBuilder.group({
-    code: ['', [Validators.required, Validators.minLength(6)]],
-    name: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    active: [true, [Validators.required]]
-  });
-
-  if (locationId) {
-    this.isNewLocation = false;
-    this.locationService.getOne(locationId).subscribe({
-      next: (location) => {
-        this.location = location;
-        this.locationForm.patchValue({
-          code: location.code,
-          name: location.name,
-          address: location.address,
-          active: location.active
-        });
-      },
-      error: (err) => {
-        this.router.navigateByUrl('/');
-        console.error(err);
-      }
+    this.locationForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      status: [LocationStatus.ACTIVE, [Validators.required]]
     });
+
+    if (locationId) {
+      this.isNewLocation = false;
+      this.locationService.getOne(locationId).subscribe({
+        next: (location) => {
+          this.location = location;
+          this.locationForm.patchValue({
+            name: location.name,
+            address: location.address,
+            status: location.status
+          });
+        },
+        error: (err) => {
+          this.router.navigateByUrl('/');
+          this.toastService.showError('Helyszín nem található');
+          console.error(err);
+        }
+      });
+    }
   }
-  }
-  
 
   saveLocation() {
-    const locationData = this.locationForm.value;
+    if (this.locationForm.invalid) {
+      return;
+    }
 
-    if (this.locationForm.valid) {
-      if (this.isNewLocation) {
-        this.locationService.create(locationData).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/');
-            this.toastService.showSuccess('Helyszín létrehozása sikeres');
-          },
-          error: (err) => {
-            this.toastService.showError(err.error.message);
-            console.error(err);
-          }
-        });
-      } else {
-        this.locationService.update({
-          id: this.location.id,
-          ...locationData
-        }).subscribe({
+    const locationData: LocationDTO = this.locationForm.value;
+
+    if (this.isNewLocation) {
+      this.locationService.create(locationData).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+          this.toastService.showSuccess('Helyszín létrehozása sikeres');
+        },
+        error: (err) => {
+          this.toastService.showError(err.error || 'Hiba történt a létrehozás során');
+          console.error(err);
+        }
+      });
+    } else {
+      if (this.location?.id) {
+        this.locationService.update(this.location.id, locationData).subscribe({
           next: () => {
             this.router.navigateByUrl('/');
             this.toastService.showSuccess('Helyszín módosítás sikeres');
           },
           error: (err) => {
-            this.toastService.showError(err.error.message);
+            this.toastService.showError(err.error || 'Hiba történt a módosítás során');
             console.error(err);
           }
         });
       }
+    }
+  }
+  
+  deleteLocation() {
+    if (this.location?.id && confirm('Biztosan törölni szeretnéd ezt a helyszínt?')) {
+      this.locationService.delete(this.location.id).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+          this.toastService.showSuccess('Helyszín törlése sikeres');
+        },
+        error: (err) => {
+          this.toastService.showError(err.error || 'Hiba történt a törlés során');
+          console.error(err);
+        }
+      });
     }
   }
 }

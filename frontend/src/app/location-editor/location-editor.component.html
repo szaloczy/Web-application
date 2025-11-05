@@ -1,19 +1,7 @@
 <div class="row justify-content-md-center">
     <div class="col-md-6">
-        <h2 class="text-center m-5">Helyszín adatok</h2>
+        <h2 class="text-center m-5">{{ isNewLocation ? 'Új helyszín' : 'Helyszín szerkesztése' }}</h2>
         <form [formGroup]="locationForm">
-            <div class="mb-3">
-              <label for="code" class="form-label" >Helyszín kódja:</label>
-              <input type="text" class="form-control" id="code" name="code" formControlName="code">
-              @if (locationForm.get("code")?.invalid && (locationForm.get("code")?.touched || locationForm.get("code")?.dirty)) {
-                @if (locationForm.get('code')?.errors?.["required"]) {
-                  <small class="error-message">A helyszín kódjának a megadása kötelező</small>
-                }
-                @if (locationForm.get('code')?.errors?.["minlength"]) {
-                    <small class="error-message">A helyszín kódjának legalább 6 karakternek kell lennie</small>
-                }
-              }
-            </div>
             <div class="mb-3">
                 <label for="name" class="form-label">Helyszín neve:</label>
                 <input type="text" class="form-control" id="name" name="name" formControlName="name">
@@ -25,7 +13,7 @@
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">Helyszín címe:</label>
-                <input type="text" class="form-control" id="address" name="adsress"  formControlName="address">
+                <input type="text" class="form-control" id="address" name="address"  formControlName="address">
                 @if (locationForm.get("address")?.invalid && (locationForm.get("address")?.touched || locationForm.get("address")?.dirty)) {
                     @if (locationForm.get('address')?.errors?.["required"]) {
                       <small class="error-message">A helyszín címének megadása kötelező</small>
@@ -33,19 +21,25 @@
                   }
             </div>
             <div class="mb-3">
-                <label for="active" class="form-label">Állapot:</label>
-                <select name="active" id="active" class="form-select"  formControlName="active">
-                    <option [ngValue]="true">Aktív</option>
-                    <option [ngValue]="false">Inaktív</option>
+                <label for="status" class="form-label">Állapot:</label>
+                <select name="status" id="status" class="form-select"  formControlName="status">
+                    <option [ngValue]="LocationStatus.ACTIVE">Aktív</option>
+                    <option [ngValue]="LocationStatus.INACTIVE">Inaktív</option>
                 </select>
-                @if (locationForm.get("active")?.invalid && (locationForm.get("active")?.touched || locationForm.get("active")?.dirty)) {
-                    @if (locationForm.get('active')?.errors?.["required"]) {
+                @if (locationForm.get("status")?.invalid && (locationForm.get("status")?.touched || locationForm.get("status")?.dirty)) {
+                    @if (locationForm.get('status')?.errors?.["required"]) {
                       <small class="error-message">A helyszín állapotának megadása kötelező</small>
                     }
                   }
             </div>
-            <div class="text-end">
-                <button class="btn btn-outline-primary" (click)="saveLocation()">Mentés</button>
+            <div class="d-flex justify-content-between">
+                @if (!isNewLocation) {
+                    <button type="button" class="btn btn-danger" (click)="deleteLocation()">Törlés</button>
+                }
+                <div class="ms-auto">
+                    <button type="button" class="btn btn-outline-secondary me-2" routerLink="/">Mégse</button>
+                    <button type="button" class="btn btn-primary" (click)="saveLocation()">Mentés</button>
+                </div>
             </div>
         </form>
     </div>

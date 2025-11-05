@@ -31,10 +31,9 @@ export class AddClientComponent implements OnInit{
 
   location: LocationDTO = {
     id: 0,
-    code: '',
     name: '',
     address: '',
-    active: false
+    status: 'ACTIVE' as any
   };
   clients: ClientDTO[] = []; 
 

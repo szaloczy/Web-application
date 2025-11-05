@@ -5,25 +5,23 @@
             <thead>
                 <tr>
                     <th>Név</th>
-                    <th>Kód</th>
                     <th>Cím</th>
-                    <th>Aktív</th>
+                    <th>Állapot</th>
                 </tr>
             </thead>
             <tbody>
                 @for(loc of locations; track loc.id) {
                     <tr>
                         <td>{{ loc.name }}</td>
-                        <td>{{ loc.code }}</td>
                         <td>{{ loc.address }}</td>
-                        <td>{{ loc.active ? 'Igen': 'Nem'}}</td>
+                        <td>{{ loc.status === LocationStatus.ACTIVE ? 'Aktív' : 'Inaktív' }}</td>
                         <td>
                             @if (authService.isLoggedIn()) {
-                                <button class="btn btn-outline-primary me-2" (click)="navigateToAddClientForm(loc.id)"  [disabled]="!loc.active">Véradó rögzítése</button>
-                                <button class="btn btn-outline-primary me-2" (click)="navigateToLocationForm(loc.id)">Szerkesztés</button>
+                                <button class="btn btn-outline-primary me-2" (click)="navigateToAddClientForm(loc.id!)" [disabled]="loc.status !== LocationStatus.ACTIVE">Véradó rögzítése</button>
+                                <button class="btn btn-outline-primary me-2" (click)="navigateToLocationForm(loc.id!)">Szerkesztés</button>
                             }
                             @if (authService.isAdmin()) {
-                                <button class="btn btn-outline-warning me-2" (click)="toggleLocationActive(loc.id, loc.active)">{{ loc.active ? 'Inaktiválás' : 'Aktiválás' }}</button>
+                                <button class="btn btn-outline-warning me-2" (click)="toggleLocationStatus(loc.id!, loc.status)">{{ loc.status === LocationStatus.ACTIVE ? 'Inaktiválás' : 'Aktiválás' }}</button>
                                 <button class="btn btn-outline-danger" (click)="deleteLocation($index)">Törlés</button>
                             }
                         </td>

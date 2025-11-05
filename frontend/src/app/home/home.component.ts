@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { Router } from '@angular/router';
-import { LocationDTO, UserDTO } from '../../types';
+import { LocationDTO, LocationStatus, UserDTO } from '../../types';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { ToastService } from '../services/toast.service';
@@ -21,6 +21,8 @@ export class HomeComponent implements OnInit{
 
   locations: LocationDTO[] = [];
   users: UserDTO[] = [];
+  
+  LocationStatus = LocationStatus;
 
   ngOnInit(): void {
     this.locationService.getAll().subscribe({
@@ -45,15 +47,18 @@ export class HomeComponent implements OnInit{
   deleteLocation(index: number) {
     const location = this.locations[index];
 
-    this.locationService.delete(location.id).subscribe({
-      next: () => {
-        this.locations.splice(index, 1);
-        this.toastService.showSuccess('Helyszín sikeresen törölve');
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    if (location.id && confirm('Biztosan törölni szeretnéd ezt a helyszínt?')) {
+      this.locationService.delete(location.id).subscribe({
+        next: () => {
+          this.locations.splice(index, 1);
+          this.toastService.showSuccess('Helyszín sikeresen törölve');
+        },
+        error: (err) => {
+          this.toastService.showError('Hiba történt a törlés során');
+          console.error(err);
+        }
+      });
+    }
   }
 
   deleteUser(index: number) {
@@ -78,18 +83,29 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['edit-location', id]);
   }
 
-  toggleLocationActive(locationId: number, currentStatus: boolean) {
-    const newStatus = !currentStatus;
-    this.locationService.updateActiveStatus(locationId, newStatus).subscribe({
-      next: (updatedLocation) => {
-        const locIndex = this.locations.findIndex(loc => loc.id === locationId);
-        if (locIndex !== -1) {
-          this.locations[locIndex].active = updatedLocation.active;
+  toggleLocationStatus(locationId: number, currentStatus: LocationStatus) {
+    const newStatus = currentStatus === LocationStatus.ACTIVE ? LocationStatus.INACTIVE : LocationStatus.ACTIVE;
+    
+    const location = this.locations.find(loc => loc.id === locationId);
+    if (location && location.id) {
+      const updatedLocation: LocationDTO = {
+        ...location,
+        status: newStatus
+      };
+      
+      this.locationService.update(location.id, updatedLocation).subscribe({
+        next: (updated) => {
+          const locIndex = this.locations.findIndex(loc => loc.id === locationId);
+          if (locIndex !== -1) {
+            this.locations[locIndex] = updated;
+          }
+          this.toastService.showSuccess('Helyszín állapota frissítve');
+        },
+        error: (err) => {
+          this.toastService.showError('Hiba az állapot frissítésekor');
+          console.error('Hiba az állapot frissítésekor:', err);
         }
-      },
-      error: (err) => {
-        console.error('Hiba az állapot frissítésekor:', err);
-      }
-    });
+      });
+    }
   }
 }

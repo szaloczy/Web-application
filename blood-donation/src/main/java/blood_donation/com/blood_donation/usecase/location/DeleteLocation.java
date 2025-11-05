@@ -5,15 +5,16 @@ import blood_donation.com.blood_donation.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class ListLocations {
+public class DeleteLocation {
 
     private final LocationDataSource dataSource;
 
-    public List<Location> execute() {
-        return dataSource.getAllLocation();
+    public void execute(Long id) {
+        Location location = dataSource.getLocationById(id);
+        if (location != null) {
+            dataSource.deleteLocation(location);
+        }
     }
 }

@@ -5,15 +5,15 @@ import blood_donation.com.blood_donation.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class ListLocations {
+public class UpdateLocation {
 
     private final LocationDataSource dataSource;
 
-    public List<Location> execute() {
-        return dataSource.getAllLocation();
+    public Location execute(Long id, String name, String address, blood_donation.com.blood_donation.enums.LocationStatus status) {
+        Location location = new Location(id, name, address, status);
+        dataSource.updateLocation(location);
+        return location;
     }
 }

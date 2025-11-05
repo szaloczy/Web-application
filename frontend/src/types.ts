@@ -17,11 +17,15 @@ export interface AccessTokenDTO {
 }
 
 export interface LocationDTO {
-    id: number;
-    code: string;
+    id?: number;
     name: string;
     address: string;
-    active: boolean;
+    status: LocationStatus;
+}
+
+export enum LocationStatus {
+    ACTIVE = 'ACTIVE',
+    INACTIVE = 'INACTIVE'
 }
 
 export interface UserDTO {

@@ -5,7 +5,6 @@ import blood_donation.com.blood_donation.domain.User;
 import blood_donation.com.blood_donation.framework.db.entity.UserRecord;
 import blood_donation.com.blood_donation.framework.db.repository.UserRepository;
 import blood_donation.com.blood_donation.framework.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,23 +39,25 @@ public class UserDataSourceImpl implements UserDataSource {
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        Optional<UserRecord> userRecord = userRepository.findByUsername(username);
+        return userRecord.map(userMapper::toUser).orElse(null);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        Optional<UserRecord> userRecord =  userRepository.findByEmail(email);
-        //User user = userMapper.toUser(userRecord);
-        return null;
+        Optional<UserRecord> userRecord = userRepository.findByEmail(email);
+        return userRecord.map(userMapper::toUser).orElse(null);
     }
 
     @Override
     public User getUserById(Long id) {
-        return null;
+        Optional<UserRecord> userRecord = userRepository.findById(id);
+        return userRecord.map(userMapper::toUser).orElse(null);
     }
 
     @Override
     public List<User> getAllUser() {
-        return List.of();
+        List<UserRecord> userRecords = userRepository.findAll();
+        return userMapper.toUsers(userRecords);
     }
 }

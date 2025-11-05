@@ -16,7 +16,7 @@ export class UserService {
   }
 
   register(data: RegisterDTO) {
-    return this.http.post<string>(`${this.apiUrl}`, data);
+    return this.http.post<AccessTokenDTO>(`${this.apiUrl}/user`, data);
   }
 
   getAll() {

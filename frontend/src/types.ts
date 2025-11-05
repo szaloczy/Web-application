@@ -10,7 +10,10 @@ export interface LoginDTO {
 }
 
 export interface AccessTokenDTO {
-    accessToken: string;
+    token: string;
+    username: string;
+    email: string;
+    role: string;
 }
 
 export interface LocationDTO {

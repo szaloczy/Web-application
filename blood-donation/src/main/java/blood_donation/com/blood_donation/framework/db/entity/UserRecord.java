@@ -26,4 +26,8 @@ public class UserRecord {
 
     @Column(nullable = false)
     private String password;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private String role = "ADMIN";
 }

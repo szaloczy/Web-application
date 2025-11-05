@@ -29,8 +29,11 @@
                   <label for="username" class="form-label">Felhasználónév</label>
                   <input name="username" id="username" type="text" class="form-control"  formControlName="username" required>
                   @if (loginForm.get("username")?.invalid && (loginForm.get("username")?.touched || loginForm.get("username")?.dirty)) {
+                    @if (loginForm.get("username")?.errors?.["required"]) {
+                        <small class="error-message">A felhasználónév megadása kötelező</small>
+                    }
                     @if (loginForm.get("username")?.errors?.["minlength"]) {
-                        <small class="error-message">Minimum 5 karakter</small>
+                        <small class="error-message">Minimum 3 karakter</small>
                     }
                   }
                 </div>
@@ -44,7 +47,7 @@
                         <small class="error-message">A jelszó megadása kötelező</small>
                     }
                     @if (loginForm.get("password")?.errors?.["minlength"]) {
-                        <small class="error-message">Minimum 5 karakter</small>
+                        <small class="error-message">Minimum 8 karakter</small>
                     }
                 }
             </div>

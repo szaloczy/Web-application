@@ -2,9 +2,10 @@ package blood_donation.com.blood_donation.usecase.user;
 
 import blood_donation.com.blood_donation.data.UserDataSource;
 import blood_donation.com.blood_donation.domain.User;
+import blood_donation.com.blood_donation.dto.LoginResponseDTO;
 import blood_donation.com.blood_donation.exception.InvalidPasswordException;
 import blood_donation.com.blood_donation.exception.UserAlreadyExistsException;
-import blood_donation.com.blood_donation.framework.datasource.UserDataSourceImpl;
+import blood_donation.com.blood_donation.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,21 +14,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Register {
 
-    private final UserDataSource dataSource; //Data
+    private final UserDataSource dataSource;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-
-    public User register(String username, String email, String password) {
+    public LoginResponseDTO register(String username, String email, String password) {
         validateUserDoesNotExists(username, email);
         validatePassword(password);
 
         String hashedPassword = passwordEncoder.encode(password);
-
-        User user = new User(null, username, email, hashedPassword);
+        User user = new User(null, username, email, hashedPassword, "ADMIN");
 
         dataSource.createUser(user);
 
-        return user;
+        // Generálj JWT tokent
+        String token = jwtUtil.generateToken(user.username());
+        return new LoginResponseDTO(token, user.username(), user.email(), user.role());
     }
 
     private void validateUserDoesNotExists(String email, String username) {
@@ -45,5 +47,4 @@ public class Register {
             throw new InvalidPasswordException("Password must be at least 8 character long");
         }
     }
-
 }

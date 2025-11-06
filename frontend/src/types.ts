@@ -47,16 +47,30 @@ export interface ClientDTO {
 }
 
 export interface DonationDTO {
-    id: number;
-    date: Date;
+    id?: number;
+    date: Date | string;
+    eligible: boolean;
+    reason: string | null;
+    doctor: string;
+    controlled: boolean;
+    patientFullname: string | null;
+    patientTaj: string | null;
+    clientId: number;
+    locationId: number;
+    client: ClientDTO;
+    location: LocationDTO;
+}
+
+export interface DonationCreateDTO {
+    date: Date | string;
     eligible: boolean;
     reason: string | null;
     doctor: string;
     controlled: boolean;
     patient_fullname: string | null;
-    patient_taj: number | null;
-    client: ClientDTO;
-    location: LocationDTO;
+    patient_taj: string | null;
+    client: number;
+    location: number;
 }
 
 export enum GenderType {

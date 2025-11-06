@@ -58,8 +58,8 @@
     <tbody>
       @for (donation of donations; track donation) {
       <tr>
-        <td>{{ donation.location.name }}</td>
-        <td>{{ donation.client.fullname }}</td>
+        <td>{{ getLocationName(donation) }}</td>
+        <td>{{ getClientName(donation) }}</td>
         <td>{{ donation.date }}</td>
         <td>{{ donation.eligible? 'Igen' : 'Nem'}}</td>
         <td>{{ donation.controlled? 'Igen' : 'Nem' }}</td>

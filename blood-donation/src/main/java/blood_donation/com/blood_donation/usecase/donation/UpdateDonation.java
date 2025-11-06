@@ -9,16 +9,16 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
-public class CreateDonation {
+public class UpdateDonation {
 
     private final DonationDataSource dataSource;
 
-    public Donation execute(LocalDate date, boolean eligible, String reason, String doctor,
+    public Donation execute(Long id, LocalDate date, boolean eligible, String reason, String doctor,
                            boolean controlled, String patientFullname, String patientTaj,
                            Long clientId, Long locationId) {
         
-        Donation donation = new Donation(null, date, eligible, reason, doctor, controlled, 
+        Donation donation = new Donation(id, date, eligible, reason, doctor, controlled,
                                         patientFullname, patientTaj, clientId, locationId);
-        return dataSource.createDonation(donation);
+        return dataSource.updateDonation(donation);
     }
 }

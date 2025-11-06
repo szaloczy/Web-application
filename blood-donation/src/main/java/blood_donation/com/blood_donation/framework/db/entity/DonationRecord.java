@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
-@Table
+@Table(name = "donation_record")
 @Entity
 @Builder
 @AllArgsConstructor
@@ -28,10 +28,24 @@ public class DonationRecord {
     @JoinColumn(name = "location_id", nullable = false)
     private LocationRecord location;
 
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date donationDate;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @Column(nullable = false)
-    private String doctorFullName;
+    private boolean eligible;
+
+    @Column
+    private String reason;
+
+    @Column(name = "doctor", nullable = false)
+    private String doctor;
+
+    @Column(nullable = false)
+    private boolean controlled;
+
+    @Column(name = "patient_fullname")
+    private String patientFullname;
+
+    @Column(name = "patient_taj", length = 9)
+    private String patientTaj;
 }

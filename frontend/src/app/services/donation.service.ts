@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { DonationDTO } from '../../types';
+import { DonationCreateDTO, DonationDTO } from '../../types';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -41,11 +41,11 @@ export class DonationService {
         return this.http.get<DonationDTO>(`${this.apiUrl}/` + id);
       }
     
-      create(donation: DonationDTO) {
+      create(donation: DonationCreateDTO) {
         return this.http.post<DonationDTO>(`${this.apiUrl}`, donation);
       }
     
-      update(donation: DonationDTO) {
+      update(donation: DonationCreateDTO) {
         return this.http.put<DonationDTO>(`${this.apiUrl}`, donation);
       }
     

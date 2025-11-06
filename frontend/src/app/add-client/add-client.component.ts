@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
-import { ClientDTO, LocationDTO, LocationStatus } from '../../types';
+import { ClientDTO, DonationCreateDTO, LocationDTO, LocationStatus } from '../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { DonationService } from '../services/donation.service';
@@ -44,6 +44,10 @@ export class AddClientComponent implements OnInit{
       this.locationService.getOne(locationId).subscribe({
         next: (location) => {
           this.location = location;
+          // Beállítjuk a location ID-t a form-ban
+          this.donationForm.patchValue({
+            location: location.id
+          });
         },
         error: (err) => {
           console.error(err);
@@ -61,7 +65,7 @@ export class AddClientComponent implements OnInit{
     })
 
     this.donationForm = this.fb.group({
-      location: ['', Validators.required],
+      location: [locationId || '', Validators.required],
       client: ['', Validators.required],
       date: [this.todayDate(), Validators.required],
       eligible: ['true', Validators.required],
@@ -99,15 +103,28 @@ export class AddClientComponent implements OnInit{
   onSubmit() {
     if (this.formType === 'donation') {
       if (this.donationForm.valid) {
-        console.log('Véradás mentése:', this.donationForm.value);
-        this.donationService.create(this.donationForm.value).subscribe({
+        const formValue = this.donationForm.value;
+        const donationData: DonationCreateDTO = {
+          date: formValue.date,
+          eligible: formValue.eligible === 'true' || formValue.eligible === true,
+          reason: formValue.reason || null,
+          doctor: formValue.doctor,
+          controlled: formValue.controlled === 'true' || formValue.controlled === true,
+          patient_fullname: formValue.patient_fullname || null,
+          patient_taj: formValue.patient_taj ? formValue.patient_taj.toString() : null,
+          client: parseInt(formValue.client),
+          location: parseInt(formValue.location)
+        };
+        
+        console.log('Véradás mentése:', donationData);
+        this.donationService.create(donationData).subscribe({
           next: (res) => {
             console.log(res);
             this.toastService.showSuccess('Véradás sikeresen rögzítve');
             this.router.navigateByUrl('/');
           },
           error: (err) => {
-            this.toastService.showError(err.error.message);
+            this.toastService.showError(err.error || 'Hiba történt a véradás rögzítése során');
             console.error(err);
           }
         })

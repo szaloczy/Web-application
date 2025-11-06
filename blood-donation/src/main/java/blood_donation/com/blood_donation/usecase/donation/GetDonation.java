@@ -7,15 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteDonation {
+public class GetDonation {
 
     private final DonationDataSource dataSource;
 
-    public void execute(Long id) {
-        Donation donation = dataSource.getDonationById(id);
-        if (donation == null) {
-            throw new IllegalArgumentException("Véradás nem található");
-        }
-        dataSource.deleteDonation(id);
+    public Donation execute(Long id) {
+        return dataSource.getDonationById(id);
     }
 }

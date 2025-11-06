@@ -18,7 +18,7 @@ public class UpdateDonation {
                            Long clientId, Long locationId) {
         
         Donation donation = new Donation(id, date, eligible, reason, doctor, controlled,
-                                        patientFullname, patientTaj, clientId, locationId);
+                                        patientFullname, patientTaj, clientId, locationId, null, null);
         return dataSource.updateDonation(donation);
     }
 }

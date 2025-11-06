@@ -10,4 +10,5 @@ public interface LocationRepository extends JpaRepository<LocationRecord, Long> 
     Optional<LocationRecord> findByName(String name);
     Optional<LocationRecord> findByAddress(String address);
     Optional<LocationRecord> findByStatus(LocationStatus status);
+    long countByStatus(LocationStatus status);
 }

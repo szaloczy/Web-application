@@ -77,3 +77,12 @@ export enum GenderType {
     MALE = 'MALE',
     FEMALE = 'FEMALE'
 }
+
+export interface DashboardStatsDTO {
+    todayDonations: number;
+    totalClients: number;
+    activeLocations: number;
+    thisMonthDonations: number;
+    eligibleDonations: number;
+    ineligibleDonations: number;
+}

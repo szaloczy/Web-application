@@ -1,14 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { Router } from '@angular/router';
-import { LocationDTO, LocationStatus, UserDTO } from '../../types';
+import { DashboardStatsDTO, LocationDTO, LocationStatus, UserDTO } from '../../types';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { ToastService } from '../services/toast.service';
+import { StatsService } from '../services/stats.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -17,14 +19,18 @@ export class HomeComponent implements OnInit{
   authService = inject(AuthService);
   userService = inject(UserService);
   toastService = inject(ToastService);
+  statsService = inject(StatsService);
   router = inject(Router);
 
   locations: LocationDTO[] = [];
   users: UserDTO[] = [];
+  stats: DashboardStatsDTO | null = null;
   
   LocationStatus = LocationStatus;
 
   ngOnInit(): void {
+    this.loadStats();
+    
     this.locationService.getAll().subscribe({
       next: (locations) => {
         this.locations = locations;
@@ -42,6 +48,17 @@ export class HomeComponent implements OnInit{
         console.error(err);
       }
     })
+  }
+
+  loadStats(): void {
+    this.statsService.getDashboardStats().subscribe({
+      next: (stats) => {
+        this.stats = stats;
+      },
+      error: (err) => {
+        console.error('Error loading stats:', err);
+      }
+    });
   }
 
   deleteLocation(index: number) {

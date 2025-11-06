@@ -13,4 +13,8 @@ public interface DonationRepository extends JpaRepository<DonationRecord, Long> 
     Optional<List<DonationRecord>> findByClient(ClientRecord client);
     Optional<List<DonationRecord>> findByLocation(LocationRecord location);
     Optional<List<DonationRecord>> findByDateBetween(LocalDate fromDate, LocalDate toDate);
+    List<DonationRecord> findByDate(LocalDate date);
+    long countByEligible(boolean eligible);
+    long countByDate(LocalDate date);
+    long countByDateBetween(LocalDate fromDate, LocalDate toDate);
 }

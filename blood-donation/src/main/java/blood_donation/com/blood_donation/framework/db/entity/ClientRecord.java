@@ -1,13 +1,14 @@
 package blood_donation.com.blood_donation.framework.db.entity;
 
-import blood_donation.com.blood_donation.enums.Gender;
+import blood_donation.com.blood_donation.enums.GenderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Table
@@ -15,8 +16,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DonatorRecord {
-
+public class ClientRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -25,25 +25,24 @@ public class DonatorRecord {
     private String fullname;
 
     @Column(nullable = false)
-    private int TAJNumber;
+    private String birthplace;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Gender gender;
+    private LocalDate dateOfBirth;
 
     @Column(nullable = false)
     private String citizenship;
 
     @Column(nullable = false)
-    private String bornLocation;
-
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date birthDate;
-
-    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false, unique = true, length = 9)
+    private String tajNumber;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean isAble;
+    private GenderType gender;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client", fetch = FetchType.LAZY)
+    private List<DonationRecord> donations;
 }

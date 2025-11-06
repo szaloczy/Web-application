@@ -136,8 +136,8 @@
             <label class="form-label">Nem</label>
             <select class="form-select" formControlName="gender">
               <option value="">Válassz nemet</option>
-              <option value="male">Férfi</option>
-              <option value="female">Nő</option>
+              <option value="MALE">Férfi</option>
+              <option value="FEMALE">Nő</option>
             </select>
             @if (newClientForm.get("gender")?.invalid && (newClientForm.get("gender")?.touched || newClientForm.get("gender")?.dirty)) {
               @if (newClientForm.get('gender')?.errors?.["required"]) {

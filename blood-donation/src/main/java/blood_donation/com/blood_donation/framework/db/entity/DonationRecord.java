@@ -21,8 +21,8 @@ public class DonationRecord {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "donator_id", nullable = false)
-    private DonatorRecord donator;
+    @JoinColumn(name = "client_id", nullable = false)
+    private ClientRecord client;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = false)

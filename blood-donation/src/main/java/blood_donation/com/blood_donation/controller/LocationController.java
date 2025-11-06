@@ -4,6 +4,7 @@ import blood_donation.com.blood_donation.domain.Location;
 import blood_donation.com.blood_donation.enums.LocationStatus;
 import blood_donation.com.blood_donation.usecase.location.CreateLocation;
 import blood_donation.com.blood_donation.usecase.location.DeleteLocation;
+import blood_donation.com.blood_donation.usecase.location.GetLocation;
 import blood_donation.com.blood_donation.usecase.location.ListLocations;
 import blood_donation.com.blood_donation.usecase.location.UpdateLocation;
 import org.springframework.http.HttpStatus;
@@ -21,15 +22,18 @@ public class LocationController {
     private final UpdateLocation updateLocationUseCase;
     private final DeleteLocation deleteLocationUseCase;
     private final ListLocations listLocationsUseCase;
+    private final GetLocation getLocationUseCase;
 
     public LocationController(CreateLocation createLocationUseCase, 
                              UpdateLocation updateLocationUseCase,
                              DeleteLocation deleteLocationUseCase, 
-                             ListLocations listLocationsUseCase) {
+                             ListLocations listLocationsUseCase,
+                             GetLocation getLocationUseCase) {
         this.createLocationUseCase = createLocationUseCase;
         this.updateLocationUseCase = updateLocationUseCase;
         this.deleteLocationUseCase = deleteLocationUseCase;
         this.listLocationsUseCase = listLocationsUseCase;
+        this.getLocationUseCase = getLocationUseCase;
     }
 
     @GetMapping
@@ -39,6 +43,19 @@ public class LocationController {
             return ResponseEntity.ok(locations);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getLocationById(@PathVariable Long id) {
+        try {
+            Location location = getLocationUseCase.execute(id);
+            if (location == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(location);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

@@ -36,7 +36,7 @@ export interface UserDTO {
 }
 
 export interface ClientDTO {
-    id: number;
+    id?: number;
     fullname: string;
     birthplace: string;
     date_of_birth: Date;
@@ -60,6 +60,6 @@ export interface DonationDTO {
 }
 
 export enum GenderType {
-    MALE = 'male',
-    FEMALE = 'female'
+    MALE = 'MALE',
+    FEMALE = 'FEMALE'
 }

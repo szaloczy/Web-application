@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
-import { ClientDTO, LocationDTO } from '../../types';
+import { ClientDTO, LocationDTO, LocationStatus } from '../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from '../services/location.service';
 import { DonationService } from '../services/donation.service';
@@ -30,10 +30,9 @@ export class AddClientComponent implements OnInit{
   toastService = inject(ToastService);
 
   location: LocationDTO = {
-    id: 0,
     name: '',
     address: '',
-    status: 'ACTIVE' as any
+    status: LocationStatus.ACTIVE
   };
   clients: ClientDTO[] = []; 
 

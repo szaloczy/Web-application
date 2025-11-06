@@ -18,8 +18,8 @@ RUN npm run build
 # Production stage
 FROM nginx:alpine
 
-# Copy built app to nginx
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+# Copy built app to nginx - Angular 19 uses 'browser' folder
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf

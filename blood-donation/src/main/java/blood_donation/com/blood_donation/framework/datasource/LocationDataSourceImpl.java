@@ -69,4 +69,10 @@ public class LocationDataSourceImpl implements LocationDataSource {
         List<LocationRecord> locationRecords = locationRepository.findAll();
         return locationMapper.toLocations(locationRecords);
     }
+
+    @Override
+    public List<Location> getLocationsByFilters(String name, String address, LocationStatus status) {
+        List<LocationRecord> locationRecords = locationRepository.findByFilters(name, address, status);
+        return locationMapper.toLocations(locationRecords);
+    }
 }

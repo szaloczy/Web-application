@@ -7,10 +7,11 @@ import { UserService } from '../services/user.service';
 import { ToastService } from '../services/toast.service';
 import { StatsService } from '../services/stats.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -26,17 +27,23 @@ export class HomeComponent implements OnInit{
   users: UserDTO[] = [];
   stats: DashboardStatsDTO | null = null;
   
+  locationFilter = {
+    name: '',
+    address: '',
+    status: ''
+  };
+  
   LocationStatus = LocationStatus;
 
   ngOnInit(): void {
     this.loadStats();
     
-    this.locationService.getAll().subscribe({
+    this.locationService.getAll(undefined).subscribe({
       next: (locations) => {
         this.locations = locations;
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error loading locations:', err);
       }
     });
 
@@ -57,6 +64,30 @@ export class HomeComponent implements OnInit{
       },
       error: (err) => {
         console.error('Error loading stats:', err);
+      }
+    });
+  }
+
+  onFilterLocations(): void {
+    const filters: any = {};
+    
+    if (this.locationFilter.name && this.locationFilter.name.trim()) {
+      filters.name = this.locationFilter.name.trim();
+    }
+    if (this.locationFilter.address && this.locationFilter.address.trim()) {
+      filters.address = this.locationFilter.address.trim();
+    }
+    if (this.locationFilter.status) {
+      filters.status = this.locationFilter.status as LocationStatus;
+    }
+
+    this.locationService.getAll(Object.keys(filters).length > 0 ? filters : undefined).subscribe({
+      next: (locations) => {
+        this.locations = locations;
+      },
+      error: (err) => {
+        console.error('Location filter error:', err);
+        this.toastService.showError('Hiba történt a szűrés során');
       }
     });
   }

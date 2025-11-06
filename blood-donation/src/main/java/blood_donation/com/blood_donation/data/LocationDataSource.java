@@ -14,5 +14,6 @@ public interface LocationDataSource {
     Location getLocationByName(String name);
     Location getLocationByAddress(String address);
     List<Location> getAllLocation();
+    List<Location> getLocationsByFilters(String name, String address, LocationStatus status);
 }
 

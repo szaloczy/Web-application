@@ -26,4 +26,13 @@ export class AppComponent {
     this.router.navigateByUrl('/login');
     this.toastService.showSuccess('Sikeres kijelentkezés');
   }
+
+  navigateTo(path: string) {
+    if (!this.authService.isLoggedIn()) {
+      this.toastService.showError('Jelentkezz be a folytatáshoz!');
+      this.router.navigateByUrl('/login');
+      return;
+    }
+    this.router.navigateByUrl(path);
+  }
 }

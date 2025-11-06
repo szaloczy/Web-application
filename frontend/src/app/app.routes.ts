@@ -8,10 +8,10 @@ import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
     { path: 'login', component: LoginComponent},
-    { path: 'create-location', component: LocationEditorComponent },
-    { path: 'edit-location/:id', component: LocationEditorComponent },
+    { path: '', component: HomeComponent, canActivate: [ () => inject(AuthService).preventGuestAccess() ] },
+    { path: 'create-location', component: LocationEditorComponent, canActivate: [ () => inject(AuthService).preventGuestAccess() ] },
+    { path: 'edit-location/:id', component: LocationEditorComponent, canActivate: [ () => inject(AuthService).preventGuestAccess() ] },
     { path: 'add-client/:id', component: AddClientComponent, canActivate: [ () => inject(AuthService).preventGuestAccess() ]},
-    { path: 'donations', component: DonationsComponent }
+    { path: 'donations', component: DonationsComponent, canActivate: [ () => inject(AuthService).preventGuestAccess() ] }
 ];

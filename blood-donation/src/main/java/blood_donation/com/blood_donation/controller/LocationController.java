@@ -37,9 +37,12 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Location>> getAllLocations() {
+    public ResponseEntity<List<Location>> getAllLocations(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) LocationStatus status) {
         try {
-            List<Location> locations = listLocationsUseCase.execute();
+            List<Location> locations = listLocationsUseCase.execute(name, address, status);
             return ResponseEntity.ok(locations);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

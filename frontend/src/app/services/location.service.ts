@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { LocationDTO } from '../../types';
+import { LocationDTO, LocationStatus } from '../../types';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,26 @@ export class LocationService {
 
   http = inject(HttpClient);
 
-  getAll() {
-    return this.http.get<LocationDTO[]>(`${this.apiUrl}`);
+  getAll(filters?: {
+    name?: string;
+    address?: string;
+    status?: LocationStatus;
+  }) {
+    let params = new HttpParams();
+
+    if (filters) {
+      if (filters.name) {
+        params = params.set('name', filters.name);
+      }
+      if (filters.address) {
+        params = params.set('address', filters.address);
+      }
+      if (filters.status) {
+        params = params.set('status', filters.status);
+      }
+    }
+
+    return this.http.get<LocationDTO[]>(`${this.apiUrl}`, { params });
   }
 
   getOne(id: number) {
